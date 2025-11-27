@@ -11,6 +11,29 @@
 Tableau MCP is a suite of developer primitives, including tools, resources and prompts, that will
 make it easier for developers to build AI applications that integrate with Tableau.
 
+## Enhanced Features
+
+This fork includes additional features built on top of the official Tableau MCP to improve user experience and productivity:
+
+### Favorites Management
+
+The favorites feature allows users to quickly access their most frequently used Tableau content. This enhancement provides:
+
+- **Quick Access to Preferred Content**: Retrieve your favorite projects, workbooks, views, and datasources without searching through the entire Tableau site
+- **Personalized Workflows**: Build AI workflows that prioritize your most important content based on your favorites
+- **Context-Aware Recommendations**: Use your favorites as context for AI-powered analysis and reporting
+
+**Use Cases:**
+
+1. **Daily Dashboard Review**: "Show me my favorite dashboards and summarize any significant changes in the last 24 hours"
+   - Quickly review your most important metrics without manually navigating through projects
+
+2. **Quick Report Generation**: "Generate a summary report from my favorite workbooks in the Sales project"
+   - Automatically compile insights from your curated list of key workbooks
+
+3. **Personalized Content Discovery**: "Find workbooks similar to my favorites that I haven't seen yet"
+   - Discover new relevant content based on your existing preferences
+
 ## Official Documentation
 
 https://tableau.github.io/tableau-mcp/
@@ -93,3 +116,29 @@ Show me an image of the "Economy" view in the "Finances" project.
 #### Response
 
 ![Economy View Image](docs/static/img/economy-view.png)
+
+#### Prompt #4: Listing Favorites
+
+```
+Show me my favorite projects and workbooks.
+```
+
+#### Response
+
+```
+Here are your favorite projects:
+1. Marketing Analytics (ID: a1b2c3d4-e5f6-7890-abcd-ef1234567890)
+2. Sales Dashboard (ID: b2c3d4e5-f6a7-8901-bcde-f12345678901)
+3. Executive Reports (ID: c3d4e5f6-a7b8-9012-cdef-123456789012)
+
+And your favorite workbooks:
+1. Quarterly Revenue Report
+   - Project: Finance
+   - URL: https://tableau-server.example.com/#/site/mysite/workbooks/123456
+   - Last Updated: November 20, 2025
+
+2. Customer Insights Dashboard
+   - Project: Marketing
+   - URL: https://tableau-server.example.com/#/site/mysite/workbooks/234567
+   - Last Updated: November 18, 2025
+```
