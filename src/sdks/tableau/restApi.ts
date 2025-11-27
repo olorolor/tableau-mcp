@@ -12,6 +12,7 @@ import AuthenticationMethods, {
 } from './methods/authenticationMethods.js';
 import ContentExplorationMethods from './methods/contentExplorationMethods.js';
 import DatasourcesMethods from './methods/datasourcesMethods.js';
+import FavoritesMethods from './methods/favoritesMethods.js';
 import MetadataMethods from './methods/metadataMethods.js';
 import PulseMethods from './methods/pulseMethods.js';
 import ServerMethods from './methods/serverMethods.js';
@@ -36,6 +37,7 @@ export class RestApi {
   private _authenticatedAuthenticationMethods?: AuthenticatedAuthenticationMethods;
   private _contentExplorationMethods?: ContentExplorationMethods;
   private _datasourcesMethods?: DatasourcesMethods;
+  private _favoritesMethods?: FavoritesMethods;
   private _metadataMethods?: MetadataMethods;
   private _pulseMethods?: PulseMethods;
   private _serverMethods?: ServerMethods;
@@ -114,6 +116,15 @@ export class RestApi {
     }
 
     return this._datasourcesMethods;
+  }
+
+  get favoritesMethods(): FavoritesMethods {
+    if (!this._favoritesMethods) {
+      this._favoritesMethods = new FavoritesMethods(this._baseUrl, this.creds);
+      this._addInterceptors(this._baseUrl, this._favoritesMethods.interceptors);
+    }
+
+    return this._favoritesMethods;
   }
 
   get metadataMethods(): MetadataMethods {

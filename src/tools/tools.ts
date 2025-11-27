@@ -1,4 +1,8 @@
 import { getSearchContentTool } from './contentExploration/searchContent.js';
+import { getListFavoriteDatasourcesTool } from './favorites/listFavoriteDatasources.js';
+import { getListFavoriteProjectsTool } from './favorites/listFavoriteProjects.js';
+import { getListFavoriteViewsTool } from './favorites/listFavoriteViews.js';
+import { getListFavoriteWorkbooksTool } from './favorites/listFavoriteWorkbooks.js';
 import { getGetDatasourceMetadataTool } from './getDatasourceMetadata/getDatasourceMetadata.js';
 import { getListDatasourcesTool } from './listDatasources/listDatasources.js';
 import { getGeneratePulseMetricValueInsightBundleTool } from './pulse/generateMetricValueInsightBundle/generatePulseMetricValueInsightBundleTool.js';
@@ -30,4 +34,8 @@ export const toolFactories = [
   getListWorkbooksTool,
   getListViewsTool,
   getSearchContentTool,
+  getListFavoriteWorkbooksTool,
+  getListFavoriteViewsTool,
+  getListFavoriteProjectsTool,
+  getListFavoriteDatasourcesTool,
 ];
