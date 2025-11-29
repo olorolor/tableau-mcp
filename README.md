@@ -58,11 +58,7 @@ Custom views are personalized versions of Tableau views with specific filters, p
 
 ### Viewer-Focused Content Filtering
 
-This MCP server is optimized for Tableau viewers by restricting content search results to viewer-relevant types. This enhancement provides:
-
-- **Focused Search Results**: Automatically filters out creator-focused content types (datasources, tables, flows, etc.)
-- **Configurable Content Types**: Easily customize which content types are searchable via environment variables
-- **Improved User Experience**: Viewers see only the content they can interact with (workbooks, views, projects, collections)
+This MCP server is optimized for Tableau viewers by restricting content search results to viewer-relevant types. **By default, creator-focused content types are filtered out** to provide a cleaner experience for end users.
 
 **Default Allowed Types:**
 - `datasource` - Published data sources
@@ -79,31 +75,17 @@ This MCP server is optimized for Tableau viewers by restricting content search r
 - `table` - Database tables
 - `database` - Database connections
 
-**Configuration:**
+**Why filter content types:**
+- **Focused Search Results**: Removes creator-focused content types that viewers don't typically need
+- **Improved User Experience**: Users see only the content they can interact with
+- **Reduced Complexity**: Simplifies search results for non-technical users
 
-You can customize the allowed content types by setting the `ALLOWED_SEARCH_CONTENT_TYPES` environment variable:
+**Customizing Content Types:**
 
-```json
-{
-  "mcpServers": {
-    "tableau": {
-      "command": "npx",
-      "args": ["-y", "@tableau/mcp-server@latest"],
-      "env": {
-        "SERVER": "https://my-tableau-server.com",
-        "SITE_NAME": "my_site",
-        "PAT_NAME": "my_pat",
-        "PAT_VALUE": "pat_value",
-        "ALLOWED_SEARCH_CONTENT_TYPES": "workbook,view,project"
-      }
-    }
-  }
-}
-```
-
-To modify the default types programmatically, edit the `searchContentTypes` array in [src/config.ts](src/config.ts):
+To modify which content types are searchable, edit the `searchContentTypes` array in [src/config.ts](src/config.ts):
 
 ```typescript
+// Content types available in search for viewer, not for explorer and creator
 export const searchContentTypes = [
   // 'lens',
   'datasource',
@@ -119,11 +101,86 @@ export const searchContentTypes = [
 ] as const;
 ```
 
-**Use Cases:**
+Simply comment out types you want to exclude or uncomment types you want to include.
 
-1. **Viewer-Only Deployment**: "Search for sales dashboards" - Returns only workbooks and views, not underlying datasources or flows
-2. **Custom Content Scope**: Restrict search to only `workbook` and `view` types for end-user focused deployments
-3. **Gradual Rollout**: Start with viewer-focused types, then expand to creator types as needed
+**Examples:**
+
+1. **Viewer-Only Deployment** - Keep only `workbook`, `view`, `project`, `collection`:
+   ```typescript
+   export const searchContentTypes = [
+     'collection',
+     'project',
+     'view',
+     'workbook',
+   ] as const;
+   ```
+
+2. **Include Data Sources** - Useful for analysts who need to find data sources:
+   ```typescript
+   export const searchContentTypes = [
+     'datasource',  // Uncommented
+     'collection',
+     'project',
+     'view',
+     'workbook',
+   ] as const;
+   ```
+
+### Disabling Pulse Features
+
+Tableau Pulse is an AI-powered analytics feature that may not be enabled on all Tableau Server deployments. **By default, Pulse tools are disabled in this fork** to provide a cleaner experience for organizations that haven't enabled Pulse.
+
+**Why Pulse tools are disabled by default:**
+- Prevents confusion when Pulse features are not enabled on your Tableau Server
+- Provides a cleaner user experience by hiding tools that would fail due to system restrictions
+- Reduces cognitive load by showing only available features
+
+**Enabling Pulse (if your Tableau Server supports it):**
+
+To enable Pulse features, modify the feature flag in [src/config.ts](src/config.ts):
+
+```typescript
+// Feature flags for optional tool groups
+export const featureFlags = {
+  // Tableau Pulse features - disabled by default
+  // Set to true if Pulse is enabled on your Tableau Server
+  enablePulse: true,  // Change from false to true
+} as const;
+```
+
+This will enable all 6 Pulse tools:
+- `list-all-pulse-metric-definitions`
+- `list-pulse-metric-definitions-from-definition-ids`
+- `list-pulse-metrics-from-metric-definition-id`
+- `list-pulse-metrics-from-metric-ids`
+- `list-pulse-metric-subscriptions`
+- `generate-pulse-metric-value-insight-bundle`
+
+**Alternative: Runtime Tool Exclusion**
+
+If you're using the official Tableau MCP (not this fork), you can exclude Pulse tools at runtime using the `EXCLUDE_TOOLS` environment variable:
+
+```json
+{
+  "mcpServers": {
+    "tableau": {
+      "command": "npx",
+      "args": ["-y", "@tableau/mcp-server@latest"],
+      "env": {
+        "SERVER": "https://my-tableau-server.com",
+        "SITE_NAME": "my_site",
+        "PAT_NAME": "my_pat",
+        "PAT_VALUE": "pat_value",
+        "EXCLUDE_TOOLS": "pulse"
+      }
+    }
+  }
+}
+```
+
+You can also exclude other tool groups: `datasource`, `workbook`, `view`, `content-exploration`, `favorites`, `custom-view`.
+
+**Note:** You cannot use both `INCLUDE_TOOLS` and `EXCLUDE_TOOLS` simultaneously.
 
 ## Official Documentation
 

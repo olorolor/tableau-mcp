@@ -44,9 +44,12 @@ export const searchContentTypes = [
 
 export type SearchContentType = (typeof searchContentTypes)[number];
 
-function isSearchContentType(type: unknown): type is SearchContentType {
-  return !!searchContentTypes.find((t) => t === type);
-}
+// Feature flags for optional tool groups
+export const featureFlags = {
+  // Tableau Pulse features - disabled by default
+  // Set to true if Pulse is enabled on your Tableau Server
+  enablePulse: false,
+} as const;
 
 export class Config {
   auth: AuthType;
@@ -70,7 +73,6 @@ export class Config {
   disableLogMasking: boolean;
   includeTools: Array<ToolName>;
   excludeTools: Array<ToolName>;
-  allowedSearchContentTypes: Array<SearchContentType>;
   maxResultLimit: number | null;
   disableQueryDatasourceFilterValidation: boolean;
   disableMetadataApiRequests: boolean;
@@ -116,7 +118,6 @@ export class Config {
       DISABLE_LOG_MASKING: disableLogMasking,
       INCLUDE_TOOLS: includeTools,
       EXCLUDE_TOOLS: excludeTools,
-      ALLOWED_SEARCH_CONTENT_TYPES: allowedSearchContentTypes,
       MAX_RESULT_LIMIT: maxResultLimit,
       DISABLE_QUERY_DATASOURCE_FILTER_VALIDATION: disableQueryDatasourceFilterValidation,
       DISABLE_METADATA_API_REQUESTS: disableMetadataApiRequests,
@@ -298,15 +299,6 @@ export class Config {
     if (this.includeTools.length > 0 && this.excludeTools.length > 0) {
       throw new Error('Cannot include and exclude tools simultaneously');
     }
-
-    // Default to viewer-focused content types (datasource, workbook, view, project, collection)
-    // Exclude backend types: table, database, flow, virtualconnection, datarole, lens
-    this.allowedSearchContentTypes = allowedSearchContentTypes
-      ? allowedSearchContentTypes.split(',').flatMap((s) => {
-          const v = s.trim();
-          return isSearchContentType(v) ? [v] : [];
-        })
-      : ['datasource', 'workbook', 'view', 'project', 'collection'];
 
     if (this.auth === 'pat') {
       invariant(patName, 'The environment variable PAT_NAME is not set');

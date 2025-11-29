@@ -1,3 +1,4 @@
+import { featureFlags } from '../config.js';
 import { getSearchContentTool } from './contentExploration/searchContent.js';
 import { getGetCustomViewTool } from './customViews/getCustomView.js';
 import { getGetCustomViewDataTool } from './customViews/getCustomViewData.js';
@@ -26,12 +27,17 @@ export const toolFactories = [
   getGetDatasourceMetadataTool,
   getListDatasourcesTool,
   getQueryDatasourceTool,
-  getListAllPulseMetricDefinitionsTool,
-  getListPulseMetricDefinitionsFromDefinitionIdsTool,
-  getListPulseMetricsFromMetricDefinitionIdTool,
-  getListPulseMetricsFromMetricIdsTool,
-  getListPulseMetricSubscriptionsTool,
-  getGeneratePulseMetricValueInsightBundleTool,
+  // Pulse tools - conditionally registered based on feature flag
+  ...(featureFlags.enablePulse
+    ? [
+        getListAllPulseMetricDefinitionsTool,
+        getListPulseMetricDefinitionsFromDefinitionIdsTool,
+        getListPulseMetricsFromMetricDefinitionIdTool,
+        getListPulseMetricsFromMetricIdsTool,
+        getListPulseMetricSubscriptionsTool,
+        getGeneratePulseMetricValueInsightBundleTool,
+      ]
+    : []),
   getGetWorkbookTool,
   getGetViewDataTool,
   getGetViewImageTool,

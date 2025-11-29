@@ -2,7 +2,7 @@ import { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
 import { Ok } from 'ts-results-es';
 import { z } from 'zod';
 
-import { getConfig } from '../../config.js';
+import { getConfig, searchContentTypes } from '../../config.js';
 import { useRestApi } from '../../restApiInstance.js';
 import {
   orderBySchema,
@@ -68,17 +68,17 @@ This tool searches across all supported content types for objects relevant to th
       const config = getConfig();
       const orderByString = orderBy ? buildOrderByString(orderBy) : undefined;
 
-      // Apply allowed content types from config
+      // Apply allowed content types (viewer-focused by default)
       const enhancedFilter = filter
         ? {
             ...filter,
             contentTypes: filter.contentTypes
               ? filter.contentTypes.filter((type) =>
-                  config.allowedSearchContentTypes.includes(type as any),
+                  searchContentTypes.includes(type as any),
                 )
-              : (config.allowedSearchContentTypes as any),
+              : (searchContentTypes as any),
           }
-        : { contentTypes: config.allowedSearchContentTypes as any };
+        : { contentTypes: searchContentTypes as any };
 
       const filterString = buildFilterString(enhancedFilter);
       return await searchContentTool.logAndExecute<Array<ReducedSearchContentResponse>>({
