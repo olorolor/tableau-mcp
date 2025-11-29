@@ -11,6 +11,7 @@ import AuthenticationMethods, {
   AuthenticatedAuthenticationMethods,
 } from './methods/authenticationMethods.js';
 import ContentExplorationMethods from './methods/contentExplorationMethods.js';
+import CustomViewsMethods from './methods/customViewsMethods.js';
 import DatasourcesMethods from './methods/datasourcesMethods.js';
 import FavoritesMethods from './methods/favoritesMethods.js';
 import MetadataMethods from './methods/metadataMethods.js';
@@ -36,6 +37,7 @@ export class RestApi {
   private _authenticationMethods?: AuthenticationMethods;
   private _authenticatedAuthenticationMethods?: AuthenticatedAuthenticationMethods;
   private _contentExplorationMethods?: ContentExplorationMethods;
+  private _customViewsMethods?: CustomViewsMethods;
   private _datasourcesMethods?: DatasourcesMethods;
   private _favoritesMethods?: FavoritesMethods;
   private _metadataMethods?: MetadataMethods;
@@ -107,6 +109,15 @@ export class RestApi {
     }
 
     return this._contentExplorationMethods;
+  }
+
+  get customViewsMethods(): CustomViewsMethods {
+    if (!this._customViewsMethods) {
+      this._customViewsMethods = new CustomViewsMethods(this._baseUrl, this.creds);
+      this._addInterceptors(this._baseUrl, this._customViewsMethods.interceptors);
+    }
+
+    return this._customViewsMethods;
   }
 
   get datasourcesMethods(): DatasourcesMethods {

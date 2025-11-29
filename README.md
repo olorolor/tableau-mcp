@@ -34,6 +34,97 @@ The favorites feature allows users to quickly access their most frequently used 
 3. **Personalized Content Discovery**: "Find workbooks similar to my favorites that I haven't seen yet"
    - Discover new relevant content based on your existing preferences
 
+### Custom Views Management
+
+Custom views are personalized versions of Tableau views with specific filters, parameters, and customizations saved by users. This feature provides secure access to user-owned custom views:
+
+- **Personal View Management**: List and access only custom views you own with automatic ownership verification
+- **Data Export**: Export custom view data in CSV format for further analysis
+- **Visual Snapshots**: Retrieve high-resolution images of your customized views
+- **Metadata Access**: Get detailed information about creation dates, associated views, and workbooks
+
+**Use Cases:**
+
+1. **Personalized Reporting**: "Show me data from my custom view for the Q4 sales analysis"
+   - Access your saved filtered views without manually reapplying filters
+
+2. **Custom Dashboards Sharing**: "Get an image of my revenue trends custom view for the presentation"
+   - Export visual snapshots of your personalized dashboards
+
+3. **Tracking Custom Analyses**: "List all my custom views and when they were last updated"
+   - Manage and organize your personalized analytical views
+
+**Security Note**: All custom view operations enforce strict ownership verification - you can only access custom views you created.
+
+### Viewer-Focused Content Filtering
+
+This MCP server is optimized for Tableau viewers by restricting content search results to viewer-relevant types. This enhancement provides:
+
+- **Focused Search Results**: Automatically filters out creator-focused content types (datasources, tables, flows, etc.)
+- **Configurable Content Types**: Easily customize which content types are searchable via environment variables
+- **Improved User Experience**: Viewers see only the content they can interact with (workbooks, views, projects, collections)
+
+**Default Allowed Types:**
+- `datasource` - Published data sources
+- `workbook` - Tableau workbooks
+- `view` - Individual dashboard views
+- `project` - Project folders
+- `collection` - Curated content collections
+
+**Filtered Out Types** (for viewer focus):
+- `lens` - Ask Data lenses
+- `virtualconnection` - Virtual connections
+- `flow` - Tableau Prep flows
+- `datarole` - Data roles
+- `table` - Database tables
+- `database` - Database connections
+
+**Configuration:**
+
+You can customize the allowed content types by setting the `ALLOWED_SEARCH_CONTENT_TYPES` environment variable:
+
+```json
+{
+  "mcpServers": {
+    "tableau": {
+      "command": "npx",
+      "args": ["-y", "@tableau/mcp-server@latest"],
+      "env": {
+        "SERVER": "https://my-tableau-server.com",
+        "SITE_NAME": "my_site",
+        "PAT_NAME": "my_pat",
+        "PAT_VALUE": "pat_value",
+        "ALLOWED_SEARCH_CONTENT_TYPES": "workbook,view,project"
+      }
+    }
+  }
+}
+```
+
+To modify the default types programmatically, edit the `searchContentTypes` array in [src/config.ts](src/config.ts):
+
+```typescript
+export const searchContentTypes = [
+  // 'lens',
+  'datasource',
+  // 'virtualconnection',
+  'collection',
+  'project',
+  // 'flow',
+  // 'datarole',
+  // 'table',
+  // 'database',
+  'view',
+  'workbook',
+] as const;
+```
+
+**Use Cases:**
+
+1. **Viewer-Only Deployment**: "Search for sales dashboards" - Returns only workbooks and views, not underlying datasources or flows
+2. **Custom Content Scope**: Restrict search to only `workbook` and `view` types for end-user focused deployments
+3. **Gradual Rollout**: Start with viewer-focused types, then expand to creator types as needed
+
 ## Official Documentation
 
 https://tableau.github.io/tableau-mcp/

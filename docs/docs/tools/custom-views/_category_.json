@@ -1,0 +1,8 @@
+{
+  "label": "Custom Views",
+  "position": 7,
+  "link": {
+    "type": "generated-index",
+    "description": "Tools for managing and retrieving custom views created by the authenticated user."
+  }
+}

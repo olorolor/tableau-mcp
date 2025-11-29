@@ -67,7 +67,20 @@ This tool searches across all supported content types for objects relevant to th
     ): Promise<CallToolResult> => {
       const config = getConfig();
       const orderByString = orderBy ? buildOrderByString(orderBy) : undefined;
-      const filterString = filter ? buildFilterString(filter) : undefined;
+
+      // Apply allowed content types from config
+      const enhancedFilter = filter
+        ? {
+            ...filter,
+            contentTypes: filter.contentTypes
+              ? filter.contentTypes.filter((type) =>
+                  config.allowedSearchContentTypes.includes(type as any),
+                )
+              : (config.allowedSearchContentTypes as any),
+          }
+        : { contentTypes: config.allowedSearchContentTypes as any };
+
+      const filterString = buildFilterString(enhancedFilter);
       return await searchContentTool.logAndExecute<Array<ReducedSearchContentResponse>>({
         requestId,
         authInfo,

@@ -18,6 +18,10 @@ export const toolNames = [
   'list-favorite-views',
   'list-favorite-projects',
   'list-favorite-datasources',
+  'list-custom-views',
+  'get-custom-view',
+  'get-custom-view-data',
+  'get-custom-view-image',
 ] as const;
 export type ToolName = (typeof toolNames)[number];
 
@@ -28,6 +32,7 @@ export const toolGroupNames = [
   'pulse',
   'content-exploration',
   'favorites',
+  'custom-view',
 ] as const;
 export type ToolGroupName = (typeof toolGroupNames)[number];
 
@@ -49,6 +54,12 @@ export const toolGroups = {
     'list-favorite-views',
     'list-favorite-projects',
     'list-favorite-datasources',
+  ],
+  'custom-view': [
+    'list-custom-views',
+    'get-custom-view',
+    'get-custom-view-data',
+    'get-custom-view-image',
   ],
 } as const satisfies Record<ToolGroupName, Array<ToolName>>;
 

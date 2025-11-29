@@ -1,4 +1,8 @@
 import { getSearchContentTool } from './contentExploration/searchContent.js';
+import { getGetCustomViewTool } from './customViews/getCustomView.js';
+import { getGetCustomViewDataTool } from './customViews/getCustomViewData.js';
+import { getGetCustomViewImageTool } from './customViews/getCustomViewImage.js';
+import { getListCustomViewsTool } from './customViews/listCustomViews.js';
 import { getListFavoriteDatasourcesTool } from './favorites/listFavoriteDatasources.js';
 import { getListFavoriteProjectsTool } from './favorites/listFavoriteProjects.js';
 import { getListFavoriteViewsTool } from './favorites/listFavoriteViews.js';
@@ -38,4 +42,8 @@ export const toolFactories = [
   getListFavoriteViewsTool,
   getListFavoriteProjectsTool,
   getListFavoriteDatasourcesTool,
+  getListCustomViewsTool,
+  getGetCustomViewTool,
+  getGetCustomViewDataTool,
+  getGetCustomViewImageTool,
 ];
