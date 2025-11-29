@@ -165,7 +165,7 @@ While Pulse is disabled by default in this fork, you can also use the `EXCLUDE_T
         "SITE_NAME": "my_site",
         "PAT_NAME": "my_pat",
         "PAT_VALUE": "pat_value",
-        "EXCLUDE_TOOLS": "custom-view"
+        // "EXCLUDE_TOOLS": "any_tool"
       }
     }
   }
