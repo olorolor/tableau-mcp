@@ -1,10 +1,4 @@
-# Tableau MCP
-
-[![Tableau Supported](https://img.shields.io/badge/Support%20Level-Tableau%20Supported-53bd92.svg)](https://www.tableau.com/support-levels-it-and-developer-tools)
-
-[![Build and Test](https://github.com/tableau/tableau-mcp/actions/workflows/ci.yml/badge.svg)](https://github.com/tableau/tableau-mcp/actions/workflows/ci.yml)
-
-[![npm](https://img.shields.io/npm/v/@tableau/mcp-server)](https://www.npmjs.com/package/@tableau/mcp-server)
+# Tableau Custom MCP
 
 ## Overview
 
@@ -158,33 +152,33 @@ This will enable all 6 Pulse tools:
 
 **Alternative: Runtime Tool Exclusion**
 
-If you're using the official Tableau MCP (not this fork), you can exclude Pulse tools at runtime using the `EXCLUDE_TOOLS` environment variable:
+While Pulse is disabled by default in this fork, you can also use the `EXCLUDE_TOOLS` environment variable to exclude other tool groups at runtime:
 
 ```json
 {
   "mcpServers": {
     "tableau": {
-      "command": "npx",
-      "args": ["-y", "@tableau/mcp-server@latest"],
+      "command": "node",
+      "args": ["C:/Users/YourUsername/path/to/tableau-mcp/build/index.js"],
       "env": {
         "SERVER": "https://my-tableau-server.com",
         "SITE_NAME": "my_site",
         "PAT_NAME": "my_pat",
         "PAT_VALUE": "pat_value",
-        "EXCLUDE_TOOLS": "pulse"
+        "EXCLUDE_TOOLS": "custom-view"
       }
     }
   }
 }
 ```
 
-You can also exclude other tool groups: `datasource`, `workbook`, `view`, `content-exploration`, `favorites`, `custom-view`.
+Available tool groups for exclusion: `datasource`, `workbook`, `view`, `content-exploration`, `favorites`, `custom-view`.
 
 **Note:** You cannot use both `INCLUDE_TOOLS` and `EXCLUDE_TOOLS` simultaneously.
 
 ## Official Documentation
 
-https://tableau.github.io/tableau-mcp/
+https://github.com/olorolor/tableau-mcp
 
 ## Quick Start
 
@@ -193,14 +187,28 @@ https://tableau.github.io/tableau-mcp/
 - Node.js 22.7.5 or newer
 - An MCP client e.g. Claude Desktop, Cursor, VS Code, MCP Inspector, etc.
 
-Standard config works in most MCP clients:
+### Installation
+
+1. Clone this repository:
+   ```bash
+   git clone https://github.com/your-org/tableau-mcp.git
+   cd tableau-mcp
+   ```
+
+2. Install dependencies and build:
+   ```bash
+   npm install
+   npm run build
+   ```
+
+3. Configure Claude Desktop (or your MCP client) to use the local build:
 
 ```json
 {
   "mcpServers": {
     "tableau": {
-      "command": "npx",
-      "args": ["-y", "@tableau/mcp-server@latest"],
+      "command": "node",
+      "args": ["C:/Users/YourUsername/path/to/tableau-mcp/build/index.js"],
       "env": {
         "SERVER": "https://my-tableau-server.com",
         "SITE_NAME": "my_site",
@@ -212,9 +220,7 @@ Standard config works in most MCP clients:
 }
 ```
 
-## Deploy to Heroku
-
-[![Deploy to Heroku](https://www.herokucdn.com/deploy/button.svg)](https://www.heroku.com/deploy?template=https://github.com/tableau/tableau-mcp)
+**Note:** Replace `C:/Users/YourUsername/path/to/tableau-mcp/build/index.js` with the actual absolute path to your build directory.
 
 ## Example Prompts to Client
 
